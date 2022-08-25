@@ -34,9 +34,9 @@ router.post('/', async (req,res) => {
 });
 
 //get a specific post
-router.get('/:postId', async (req, res) => {
+router.get('/:matchId', async (req, res) => {
     try {
-        const post = await Post.findById(req.params.postId);
+        const post = await Post.find({matchId: req.params.matchId});
         res.json(post);
     } catch(err) {
         res.json({ message: err });
