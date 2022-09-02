@@ -1,5 +1,4 @@
 const express = require('express');
-const Post = require('../models/Post');
 
 //create a router in express
 const router = express.Router();
@@ -10,7 +9,7 @@ const postModel = require('../models/Post')
 //return all posts 
 router.get('/', async (req, res) => {
     try {
-        const posts = await Post.find();
+        const posts = await summonerModel.find();
         res.json(posts);
     } catch(err) {
         res.json({ message: err });
@@ -36,7 +35,7 @@ router.post('/', async (req,res) => {
 //get a specific post
 router.get('/:matchId', async (req, res) => {
     try {
-        const post = await Post.find({matchId: req.params.matchId});
+        const post = await postModel.find({matchId: req.params.matchId});
         res.json(post);
     } catch(err) {
         res.json({ message: err });

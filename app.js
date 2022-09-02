@@ -8,13 +8,17 @@ const app = express();
 
 //import routes
 const postsRoute = require('./routes/posts');
+const summonersRoute = require('./routes/summoners');
 
 //middleware
 //cors for cross domain functionality
 app.use(cors());
 //use bodyParser whenever any route is hit
 app.use(bodyParser.json());
+//routing middleware for posts
 app.use('/posts', postsRoute);
+//routing middleware for summoners
+app.use('/summoners', summonersRoute);
 
 //exmaple of a get request route
 app.get('/', (req,res) => {
