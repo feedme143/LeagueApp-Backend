@@ -42,9 +42,9 @@ router.post('/', async (req, res) => {
 //get a specific post
 router.get('/:summonerName', async (req, res) => {
     try {
-        const summoner = await summonerModel.find({name: req.params.summonerName});
+        const summoner = await summonerModel.findOne({name: req.params.summonerName});
 
-        if (summoner.length > 0)
+        if (summoner)
             res.json(summoner);
 
         else {
