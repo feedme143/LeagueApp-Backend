@@ -34,5 +34,5 @@ mongoose.connect(process.env.DB_CONNECTION)
     console.log(err);
 });
 
-//listen to port 3000
+//listen to port 3001
 app.listen(3001);
