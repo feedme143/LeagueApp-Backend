@@ -35,7 +35,7 @@ router.post('/', async (req,res) => {
 //get a specific post
 router.get('/:matchId', async (req, res) => {
     try {
-        const post = await postModel.find({matchId: req.params.matchId});
+        const post = await postModel.findOne({matchId: req.params.matchId});
         res.json(post);
     } catch(err) {
         res.json({ message: err });
