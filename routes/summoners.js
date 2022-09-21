@@ -111,7 +111,7 @@ router.get('/:summonerName', async (req, res) => {
                     res.json({ //return the wanted data
                         name: savedSummoner.name,
                         puuid: savedSummoner.puuid,
-                        lvel: savedSummoner.level,
+                        level: savedSummoner.level,
                         games: matches
                     });
 
