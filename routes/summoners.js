@@ -51,8 +51,13 @@ router.get('/:summonerName', async (req, res) => {
             for (let i in summoner.games) {
                 const response = await api.get(`http://localhost:3001/posts/${summoner.games[i]}`);
                 const d = response.data;
+                if(!d){
+                    console.log("Game data is not stored in db for summoner " + summoner.name);
+                }
                 matches.push(d.data);
             }
+
+            
 
             res.json({ //return the wanted player data
                 name: summoner.name,
@@ -130,11 +135,32 @@ router.get('/:summonerName', async (req, res) => {
             //         return d.data
             //     })
             // );  
-       
 
     } catch(err) {
         res.json({ message: err });
     }
 });
+
+router.put('/:summonerName', async (req, res) => {
+    const summonerRes = await api.get(`${summonerV4}/${req.params.summonerName}?api_key=${process.env.API_KEY}`); //fetch summoner data from riot
+    const puuid = summonerRes.data.puuid;
+    const level = summonerRes.data.level;
+
+    const query = {name: [req.params.summonerName]}
+
+    const matchRes = await api.get(`${matchV5}/by-puuid/${puuid}/ids?start=0&count=10&api_key=${process.env.API_KEY}`); //fetch last 10 games to update games arr
+    const games = matchRes.data;
+
+    let newValues = { $set: { games: games, level: level} };
+
+    const summoner = await summonerModel.updateOne(query, newValues); //update document in mongodb with new data
+
+    res.json({ //return the wanted player data
+        name: summonerRes.data.name,
+        puuid: puuid,
+        level: level,
+        games: games 
+    });
+})
 
 module.exports = router;
