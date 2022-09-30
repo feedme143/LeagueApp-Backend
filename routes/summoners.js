@@ -144,7 +144,7 @@ router.get('/:summonerName', async (req, res) => {
 router.put('/:summonerName', async (req, res) => {
     const summonerRes = await api.get(`${summonerV4}/${req.params.summonerName}?api_key=${process.env.API_KEY}`); //fetch summoner data from riot
     const puuid = summonerRes.data.puuid;
-    const level = summonerRes.data.level;
+    const level = summonerRes.data.summonerLevel;
 
     const query = {name: [req.params.summonerName]}
 
