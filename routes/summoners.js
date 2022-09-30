@@ -155,11 +155,22 @@ router.put('/:summonerName', async (req, res) => {
 
     const summoner = await summonerModel.updateOne(query, newValues); //update document in mongodb with new data
 
+
+    let matches = []; //fetch the games from my database
+    for (let i in games) {
+        const response = await api.get(`http://localhost:3001/posts/${games[i]}`);
+        const d = response.data;
+        if(!d){
+            console.log("Game data is not stored in db for summoner " + params.req.summonerName);
+        }
+        matches.push(d.data);
+    }
+    
     res.json({ //return the wanted player data
         name: summonerRes.data.name,
         puuid: puuid,
         level: level,
-        games: games 
+        games: matches 
     });
 })
 
