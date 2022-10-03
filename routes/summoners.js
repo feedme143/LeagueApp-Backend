@@ -57,7 +57,7 @@ router.get('/:summonerName', async (req, res) => {
                 matches.push(d.data);
             }
 
-            
+
 
             res.json({ //return the wanted player data
                 name: summoner.name,
