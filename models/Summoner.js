@@ -4,7 +4,8 @@ const SummonerSchema = new mongoose.Schema({
     name: String,
     puuid: String,
     level: Number,
-    games: [String]
+    games: [String],
+    lastUpdated: Number
 });
 
 

@@ -63,7 +63,8 @@ router.get('/:summonerName', async (req, res) => {
                 name: summoner.name,
                 puuid: summoner.puuid,
                 level: summoner.level,
-                games: matches
+                games: matches,
+                lastUpdated: summoner.lastUpdated
             });
             
         }
@@ -74,6 +75,7 @@ router.get('/:summonerName', async (req, res) => {
             const name = summonerRes.data.name;
             const puuid = summonerRes.data.puuid;
             const level = summonerRes.data.summonerLevel;
+            const lastUpdated = Date.now();
             
             if (summonerRes) {
                 //get match ids from puuid
@@ -85,7 +87,8 @@ router.get('/:summonerName', async (req, res) => {
                     name: name,
                     puuid: puuid,
                     level: level,
-                    games: games
+                    games: games,
+                    lastUpdated: lastUpdated
                 });
 
                 //save summoner profile to database
@@ -145,13 +148,14 @@ router.put('/:summonerName', async (req, res) => {
     const summonerRes = await api.get(`${summonerV4}/${req.params.summonerName}?api_key=${process.env.API_KEY}`); //fetch summoner data from riot
     const puuid = summonerRes.data.puuid;
     const level = summonerRes.data.summonerLevel;
+    const lastUpdated = Date.now();
 
     const query = {name: [req.params.summonerName]}
 
     const matchRes = await api.get(`${matchV5}/by-puuid/${puuid}/ids?start=0&count=10&api_key=${process.env.API_KEY}`); //fetch last 10 games to update games arr
     const games = matchRes.data;
 
-    let newValues = { $set: { games: games, level: level} };
+    let newValues = { $set: { games: games, level: level, lastUpdated: lastUpdated} };
 
     const summoner = await summonerModel.updateOne(query, newValues); //update document in mongodb with new data
 
@@ -170,7 +174,8 @@ router.put('/:summonerName', async (req, res) => {
         name: summonerRes.data.name,
         puuid: puuid,
         level: level,
-        games: matches 
+        games: matches,
+        lastUpdated: lastUpdated
     });
 })
 
