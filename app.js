@@ -9,6 +9,7 @@ const app = express();
 //import routes
 const postsRoute = require('./routes/posts');
 const summonersRoute = require('./routes/summoners');
+const imagesRoute = require('./routes/images');
 
 //middleware
 //cors for cross domain functionality
@@ -19,6 +20,8 @@ app.use(bodyParser.json());
 app.use('/posts', postsRoute);
 //routing middleware for summoners
 app.use('/summoners', summonersRoute);
+//routing middleware from images
+app.use('/images', imagesRoute);
 
 //exmaple of a get request route
 app.get('/', (req,res) => {
