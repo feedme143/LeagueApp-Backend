@@ -43,9 +43,10 @@ router.post('/', async (req, res) => {
 });
 //get a specific post
 router.get('/:summonerName', async (req, res) => {
+    const parsedName = req.params.summonerName.replaceAll(' ', '%20');
     try {
         const summoner = await summonerModel.findOne({name: req.params.summonerName});
-
+        
         if (summoner) { //if the id is found in my databse
             let matches = []; //fetch the games from my database
             for (let i in summoner.games) {
