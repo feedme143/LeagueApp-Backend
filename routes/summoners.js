@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
 });
 //get a specific post
 router.get('/:summonerName', async (req, res) => {
-    const parsedName = req.params.summonerName.replaceAll(' ', '%20');
+    encodedName = encodeURIComponent(req.params.summonerName);
     try {
         const summoner = await summonerModel.findOne({name: req.params.summonerName});
         
@@ -72,7 +72,7 @@ router.get('/:summonerName', async (req, res) => {
 
         else {
             //get summoner data from name
-            const summonerRes = await api.get(`${summonerV4}/${req.params.summonerName}?api_key=${process.env.API_KEY}`);
+            const summonerRes = await api.get(`${summonerV4}/${encodedName}?api_key=${process.env.API_KEY}`);
             const name = summonerRes.data.name;
             const puuid = summonerRes.data.puuid;
             const level = summonerRes.data.summonerLevel;
@@ -146,12 +146,13 @@ router.get('/:summonerName', async (req, res) => {
 });
 
 router.put('/:summonerName', async (req, res) => {
-    const summonerRes = await api.get(`${summonerV4}/${req.params.summonerName}?api_key=${process.env.API_KEY}`); //fetch summoner data from riot
+    encodedName = encodeURIComponent(req.params.summonerName);
+    const summonerRes = await api.get(`${summonerV4}/${encodedName}?api_key=${process.env.API_KEY}`); //fetch summoner data from riot
     const puuid = summonerRes.data.puuid;
     const level = summonerRes.data.summonerLevel;
     const lastUpdated = Date.now();
 
-    const query = {name: [req.params.summonerName]}
+    const query = {name: [encodedName]}
 
     const matchRes = await api.get(`${matchV5}/by-puuid/${puuid}/ids?start=0&count=10&api_key=${process.env.API_KEY}`); //fetch last 10 games to update games arr
     const games = matchRes.data;
