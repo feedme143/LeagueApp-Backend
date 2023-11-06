@@ -37,5 +37,7 @@ mongoose.connect(process.env.DB_CONNECTION)
     console.log(err);
 });
 
-//listen to port 3001
-app.listen(3001);
+//listen to some port
+const port = process.env.PORT || 8080;
+
+app.listen(port, () => console.log(`Listening on http://localhost:${port}`));

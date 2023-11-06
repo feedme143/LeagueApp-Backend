@@ -43,9 +43,10 @@ router.post('/', async (req, res) => {
 });
 //get a specific post
 router.get('/:summonerName', async (req, res) => {
-    encodedName = encodeURIComponent(req.params.summonerName);
+    const searchNameLower = req.params.summonerName.toLowerCase();
+    encodedName = encodeURIComponent(searchNameLower);
     try {
-        const summoner = await summonerModel.findOne({name: req.params.summonerName});
+        const summoner = await summonerModel.findOne({name_lowercase: searchNameLower});
         
         if (summoner) { //if the id is found in my databse
             let matches = []; //fetch the games from my database
@@ -85,6 +86,7 @@ router.get('/:summonerName', async (req, res) => {
 
                 //create summoner
                 const summoner = new summonerModel({
+                    name_lowercase: searchNameLower,
                     name: name,
                     puuid: puuid,
                     level: level,
@@ -121,7 +123,8 @@ router.get('/:summonerName', async (req, res) => {
                         name: savedSummoner.name,
                         puuid: savedSummoner.puuid,
                         level: savedSummoner.level,
-                        games: matches
+                        games: matches,
+                        lastUpdated: savedSummoner.lastUpdated
                     });
 
                 } catch(err) {
@@ -141,6 +144,7 @@ router.get('/:summonerName', async (req, res) => {
             // );  
 
     } catch(err) {
+        console.log(err);
         res.json({ message: err });
     }
 });
