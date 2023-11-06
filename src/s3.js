@@ -11,17 +11,10 @@ const s3Client = new S3Client({
     credentials: fromEnv(),
   });
 
-async function getFileStream(fileKey) {
-    // const downloadParams = {
-    //     Key: fileKey,
-    //     Bucket: bucket
-    // };
-    // return s3Client.getObject(downloadParams).createReadStream();
-
+async function getS3File(fileKey, prefix) {
     const command = new GetObjectCommand({
         Bucket: bucket,
-        Prefix: "items",
-        Key: fileKey,
+        Key: (prefix + "/" + fileKey) || fileKey,
       });
     
       try {
@@ -35,4 +28,4 @@ async function getFileStream(fileKey) {
     
 }
 
-exports.getFileStream = getFileStream;
+exports.getS3File = getS3File;

@@ -51,7 +51,7 @@ router.get('/:summonerName', async (req, res) => {
         if (summoner) { //if the id is found in my databse
             let matches = []; //fetch the games from my database
             for (let i in summoner.games) {
-                const response = await api.get(`http://localhost:3001/posts/${summoner.games[i]}`);
+                const response = await api.get(`http://localhost:8080/posts/${summoner.games[i]}`);
                 const d = response.data;
                 if(!d){
                     console.log("Game data is not stored in db for summoner " + summoner.name);
@@ -102,7 +102,7 @@ router.get('/:summonerName', async (req, res) => {
                     const matches = await Promise.all( 
                         savedSummoner.games.map(async id => {
                             //call to my own api
-                            const r = await api.get(`http://localhost:3001/posts/${id}`);
+                            const r = await api.get(`http://localhost:8080/posts/${id}`);
                             const d = r.data;
                             //if found, add my data, else fetch from riot
                             const data = d ? d.data : await getData();
@@ -110,7 +110,7 @@ router.get('/:summonerName', async (req, res) => {
                             async function getData() {
                                 const re = await api.get(`${matchV5}/${id}?api_key=${process.env.API_KEY}`);
                                 const dat = re.data;
-                                api.post('http://localhost:3001/posts', {matchId: id, data: dat});
+                                api.post('http://localhost:8080/posts', {matchId: id, data: dat});
         
                                 return dat;
                             }
@@ -168,7 +168,7 @@ router.put('/:summonerName', async (req, res) => {
 
     let matches = []; //fetch the games from my database
     for (let i in games) {
-        const response = await api.get(`http://localhost:3001/posts/${games[i]}`);
+        const response = await api.get(`http://localhost:8080/posts/${games[i]}`);
         const d = response.data;
         if(!d){
             console.log("Game data is not stored in db for summoner " + params.req.summonerName);

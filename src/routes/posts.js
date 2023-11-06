@@ -48,7 +48,7 @@ router.get('/:matchId', async (req, res) => {
         async function getData() { //get game data from riot and save to my databse
             const re = await api.get(`${matchV5}/${req.params.matchId}?api_key=${process.env.API_KEY}`);
             const dat = re.data;
-            api.post('http://localhost:3001/posts', {matchId: req.params.matchId, data: dat});
+            api.post('http://localhost:8080/posts', {matchId: req.params.matchId, data: dat});
 
             return {matchId: req.params.matchId, data: dat};
         }
