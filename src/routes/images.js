@@ -5,17 +5,17 @@ const router = express.Router();
 
 const { getS3File } = require('../s3');
 
-router.get('/items/:key', async (req, res) => {
+router.get('/:prefix/:key', async (req, res) => {
+    const prefix = req.params.prefix;
+    /* 
+    prefix:
+        items,
+        champicons,
+        profileicons
+    */
     const key = req.params.key
 
-    const readStream = await getS3File(key, "items");
-    readStream.Body.pipe(res);
-});
-
-router.get('/icons/:key', async (req, res) => {
-    const key = req.params.key
-
-    const readStream = await getS3File(key, "icons");
+    const readStream = await getS3File(key, prefix);
     readStream.Body.pipe(res);
 });
 
