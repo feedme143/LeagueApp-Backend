@@ -141,7 +141,7 @@ router.get('/:summonerName', async (req, res) => {
                         name: savedSummoner.name,
                         puuid: savedSummoner.puuid,
                         level: savedSummoner.level,
-                        proifleIcon: savedSummoner.profileIcon,
+                        profileIcon: savedSummoner.profileIcon,
                         games: matches,
                         ranked: savedSummoner.ranked,
                         lastUpdated: savedSummoner.lastUpdated
