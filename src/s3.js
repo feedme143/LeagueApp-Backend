@@ -24,6 +24,7 @@ async function getS3File(fileKey, prefix) {
 
       } catch (err) {
         console.error(err);
+        return {};
       }
     
 }

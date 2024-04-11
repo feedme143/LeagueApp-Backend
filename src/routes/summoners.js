@@ -6,6 +6,7 @@ const api = axios.create()
 const summonerV4 = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name';
 const matchV5 = 'https://americas.api.riotgames.com/lol/match/v5/matches';
 const leagueV4 = 'https://na1.api.riotgames.com/lol/league/v4';
+const accountV1 = 'https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid'
 
 //create a router in express
 const router = express.Router();
@@ -81,16 +82,19 @@ router.get('/:summonerName', async (req, res) => {
         else {
             //get summoner data from name
             const summonerRes = await api.get(`${summonerV4}/${encodedName}?api_key=${process.env.API_KEY}`);
+            
             const summonerData = summonerRes.data;
 
-            const name = summonerData.name;
             const puuid = summonerData.puuid;
             const profileIcon =summonerData.profileIconId;
             const id = summonerData.id;
             const level = summonerData.summonerLevel;
 
+            const accountInfo = await api.get(`${accountV1}/${puuid}?api_key=${process.env.API_KEY}`); //get game name from puuid
+            const gameName = accountInfo.data.gameName;
+
             const lastUpdated = Date.now();
-            
+        
             if (summonerRes) {
                 //get ranked info
                 const rankedRes = await api.get(`${leagueV4}/entries/by-summoner/${id}?api_key=${process.env.API_KEY}`);
@@ -103,7 +107,7 @@ router.get('/:summonerName', async (req, res) => {
                 //create summoner
                 const summoner = new summonerModel({
                     name_lowercase: searchNameLower,
-                    name: name,
+                    name: gameName,
                     puuid: puuid,
                     level: level,
                     profileIcon: profileIcon,

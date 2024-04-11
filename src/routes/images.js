@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const { getS3File } = require('../s3');
+const read = require('body-parser/lib/read');
 
 router.get('/:prefix/:key', async (req, res) => {
     const prefix = req.params.prefix;
@@ -16,7 +17,10 @@ router.get('/:prefix/:key', async (req, res) => {
     const key = req.params.key
 
     const readStream = await getS3File(key, prefix);
-    readStream.Body.pipe(res);
+
+    if (Object.keys(readStream).length !== 0)
+        readStream.Body.pipe(res);
+
 });
 
 module.exports = router;
